@@ -19,8 +19,10 @@ export function UploadCard({
   multiple = false,
   webkitdirectory = false,
   onFilesSelected,
+  onUpload,
   uploadedFiles = [],
   color = "blue",
+  isUploading = false,
 }) {
   const fileInputRef = useRef(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -88,6 +90,19 @@ export function UploadCard({
                 </li>
               ))}
             </ul>
+            {onUpload && (
+              <Button
+                color={color}
+                className="mt-4 w-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUpload(uploadedFiles);
+                }}
+                disabled={isUploading}
+              >
+                {isUploading ? "Mengupload..." : "UPLOAD"}
+              </Button>
+            )}
           </div>
         )}
       </CardBody>
@@ -112,8 +127,10 @@ UploadCard.propTypes = {
   multiple: PropTypes.bool,
   webkitdirectory: PropTypes.bool,
   onFilesSelected: PropTypes.func.isRequired,
+  onUpload: PropTypes.func,
   uploadedFiles: PropTypes.array,
   color: PropTypes.string,
+  isUploading: PropTypes.bool,
 };
 
 UploadCard.displayName = "/src/widgets/cards/upload-card.jsx";
