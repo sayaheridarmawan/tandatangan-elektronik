@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Alert,
@@ -9,80 +9,85 @@ import {
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 export function Unggah() {
-  const [showAlerts, setShowAlerts] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-  });
-  const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-  });
-  const alerts = ["gray", "green", "orange", "red"];
+  const [singlePdf, setSinglePdf] = useState(null);
+  const [folderPdfs, setFolderPdfs] = useState([]);
+
+  // ========== Upload Single PDF ==========
+  const handleSinglePdf = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      alert("File harus berformat PDF");
+      return;
+    }
+
+    setSinglePdf(file);
+  };
+
+  // ========== Upload Folder of PDFs ==========
+  const handleFolderUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (!files.length) return;
+
+    // filter hanya PDF
+    const pdfFiles = files.filter((file) =>
+      file.name.toLowerCase().endsWith(".pdf")
+    );
+
+    if (pdfFiles.length !== files.length) {
+      alert("Folder hanya boleh berisi file PDF saja!");
+      return;
+    }
+
+    setFolderPdfs(pdfFiles);
+  };
 
   return (
-    <div className="mx-auto my-20 flex max-w-screen-lg flex-col gap-8">
-      <Card>
-        <CardHeader
-          color="transparent"
-          floated={false}
-          shadow={false}
-          className="m-0 p-4"
-        >
-          <Typography variant="h5" color="blue-gray">
-            Alerts
-          </Typography>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-4 p-4">
-          {alerts.map((color) => (
-            <Alert
-              key={color}
-              open={showAlerts[color]}
-              color={color}
-              onClose={() => setShowAlerts((current) => ({ ...current, [color]: false }))}
-            >
-              A simple {color} alert with an <a href="#">example link</a>. Give
-              it a click if you like.
-            </Alert>
-          ))}
-        </CardBody>
-      </Card>
-      <Card>
-        <CardHeader
-          color="transparent"
-          floated={false}
-          shadow={false}
-          className="m-0 p-4"
-        >
-          <Typography variant="h5" color="blue-gray">
-            Alerts with Icon
-          </Typography>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-4 p-4">
-          {alerts.map((color) => (
-            <Alert
-              key={color}
-              open={showAlertsWithIcon[color]}
-              color={color}
-              icon={
-                <InformationCircleIcon strokeWidth={2} className="h-6 w-6" />
-              }
-              onClose={() => setShowAlertsWithIcon((current) => ({
-                ...current,
-                [color]: false,
-              }))}
-            >
-              A simple {color} alert with an <a href="#">example link</a>. Give
-              it a click if you like.
-            </Alert>
-          ))}
-        </CardBody>
-      </Card>
+    <div style={{ padding: "30px" }}>
+      <h2>Upload Dokumen PDF</h2>
+
+      {/* Upload Single PDF */}
+      <div style={{ marginTop: "20px" }}>
+        <label>Upload 1 File PDF:</label>
+        <br />
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={handleSinglePdf}
+        />
+        {singlePdf && <p>File: {singlePdf.name}</p>}
+      </div>
+
+      <hr style={{ margin: "30px 0" }} />
+
+      {/* Upload Folder */}
+      <div>
+        <label>Upload 1 Folder (PDF only):</label>
+        <br />
+        <input
+          type="file"
+          webkitdirectory="true"
+          directory="true"
+          multiple
+          onChange={handleFolderUpload}
+        />
+        {folderPdfs.length > 0 && (
+          <div style={{ marginTop: "10px" }}>
+            <strong>Total File PDF:</strong> {folderPdfs.length}
+            <ul>
+              {folderPdfs.map((file, idx) => (
+                <li key={idx}>{file.webkitRelativePath}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
 
 export default Unggah;
