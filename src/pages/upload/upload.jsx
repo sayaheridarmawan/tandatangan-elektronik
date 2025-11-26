@@ -8,12 +8,15 @@ import {
 } from "@material-tailwind/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { UploadCard } from "@/widgets/cards";
+import { SuccessModal, ErrorModal } from "@/widgets/modals";
 
 export function Upload() {
   const [singlePdf, setSinglePdf] = useState(null);
   const [folderPdfs, setFolderPdfs] = useState([]);
   const [isUploadingSingle, setIsUploadingSingle] = useState(false);
   const [isUploadingFolder, setIsUploadingFolder] = useState(false);
+  const [successModal, setSuccessModal] = useState({ open: false, title: "", message: "" });
+  const [errorModal, setErrorModal] = useState({ open: false, title: "", message: "" });
 
   // ========== Upload Single PDF ==========
   const handleSinglePdf = (files) => {
@@ -52,10 +55,18 @@ export function Upload() {
     try {
       // Simulate upload process
       await new Promise(resolve => setTimeout(resolve, 2000));
-      alert(`Berhasil upload ${files.length} file PDF tunggal!`);
+      setSuccessModal({
+        open: true,
+        title: "Upload Berhasil!",
+        message: `Berhasil upload ${files.length} file PDF tunggal.`,
+      });
       setSinglePdf(null);
     } catch (error) {
-      alert("Gagal upload file. Silakan coba lagi.");
+      setErrorModal({
+        open: true,
+        title: "Upload Gagal",
+        message: "Gagal upload file. Silakan coba lagi.",
+      });
     } finally {
       setIsUploadingSingle(false);
     }
@@ -66,10 +77,18 @@ export function Upload() {
     try {
       // Simulate upload process
       await new Promise(resolve => setTimeout(resolve, 2000));
-      alert(`Berhasil upload ${files.length} file PDF dari folder!`);
+      setSuccessModal({
+        open: true,
+        title: "Upload Berhasil!",
+        message: `Berhasil upload ${files.length} file PDF dari folder.`,
+      });
       setFolderPdfs([]);
     } catch (error) {
-      alert("Gagal upload folder. Silakan coba lagi.");
+      setErrorModal({
+        open: true,
+        title: "Upload Gagal",
+        message: "Gagal upload folder. Silakan coba lagi.",
+      });
     } finally {
       setIsUploadingFolder(false);
     }
@@ -108,6 +127,22 @@ export function Upload() {
           color="green"
         />
       </div>
+
+      {/* Success Modal */}
+      <SuccessModal
+        open={successModal.open}
+        onClose={() => setSuccessModal({ open: false, title: "", message: "" })}
+        title={successModal.title}
+        message={successModal.message}
+      />
+
+      {/* Error Modal */}
+      <ErrorModal
+        open={errorModal.open}
+        onClose={() => setErrorModal({ open: false, title: "", message: "" })}
+        title={errorModal.title}
+        message={errorModal.message}
+      />
     </div>
   );
 }
