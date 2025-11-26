@@ -7,14 +7,15 @@ import {
   CardBody,
 } from "@material-tailwind/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { UploadCard } from "@/widgets/cards";
 
 export function Unggah() {
   const [singlePdf, setSinglePdf] = useState(null);
   const [folderPdfs, setFolderPdfs] = useState([]);
 
   // ========== Upload Single PDF ==========
-  const handleSinglePdf = (e) => {
-    const file = e.target.files[0];
+  const handleSinglePdf = (files) => {
+    const file = files[0];
 
     if (!file) return;
 
@@ -27,9 +28,7 @@ export function Unggah() {
   };
 
   // ========== Upload Folder of PDFs ==========
-  const handleFolderUpload = (e) => {
-    const files = Array.from(e.target.files);
-
+  const handleFolderUpload = (files) => {
     if (!files.length) return;
 
     // filter hanya PDF
@@ -46,44 +45,33 @@ export function Unggah() {
   };
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h2>Upload Dokumen PDF</h2>
+    <div className="p-8">
+      <Typography variant="h2" color="blue-gray" className="mb-8">
+        Upload Dokumen PDF
+      </Typography>
 
-      {/* Upload Single PDF */}
-      <div style={{ marginTop: "20px" }}>
-        <label>Upload 1 File PDF:</label>
-        <br />
-        <input
-          type="file"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Upload Single PDF */}
+        <UploadCard
+          title="Upload File PDF Tunggal"
+          description="Pilih satu file PDF untuk diupload. Klik atau seret file ke sini."
           accept="application/pdf"
-          onChange={handleSinglePdf}
+          onFilesSelected={handleSinglePdf}
+          uploadedFiles={singlePdf ? [singlePdf] : []}
+          color="blue"
         />
-        {singlePdf && <p>File: {singlePdf.name}</p>}
-      </div>
 
-      <hr style={{ margin: "30px 0" }} />
-
-      {/* Upload Folder */}
-      <div>
-        <label>Upload 1 Folder (PDF only):</label>
-        <br />
-        <input
-          type="file"
-          webkitdirectory="true"
-          directory="true"
-          multiple
-          onChange={handleFolderUpload}
+        {/* Upload Folder */}
+        <UploadCard
+          title="Upload Folder PDF"
+          description="Pilih folder yang berisi file PDF. Klik atau seret folder ke sini."
+          // accept="application/pdf"
+          webkitdirectory={true}
+          multiple={true}
+          onFilesSelected={handleFolderUpload}
+          uploadedFiles={folderPdfs}
+          color="green"
         />
-        {folderPdfs.length > 0 && (
-          <div style={{ marginTop: "10px" }}>
-            <strong>Total File PDF:</strong> {folderPdfs.length}
-            <ul>
-              {folderPdfs.map((file, idx) => (
-                <li key={idx}>{file.webkitRelativePath}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );
