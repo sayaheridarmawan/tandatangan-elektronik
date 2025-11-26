@@ -1,1 +1,1 @@
-export * from "@/pages/upload/unggah";
+export * from "@/pages/upload/upload";

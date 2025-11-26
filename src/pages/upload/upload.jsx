@@ -9,7 +9,7 @@ import {
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { UploadCard } from "@/widgets/cards";
 
-export function Unggah() {
+export function Upload() {
   const [singlePdf, setSinglePdf] = useState(null);
   const [folderPdfs, setFolderPdfs] = useState([]);
 
@@ -78,4 +78,4 @@ export function Unggah() {
 }
 
 
-export default Unggah;
+export default Upload;
