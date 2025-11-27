@@ -95,7 +95,7 @@ export function Upload() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-white shadow-lg rounded-2xl ">
       <Typography variant="h2" color="blue-gray" className="mb-8">
         Upload Dokumen PDF
       </Typography>
@@ -104,7 +104,7 @@ export function Upload() {
         {/* Upload Single PDF */}
         <UploadCard
           title="Upload File PDF Tunggal"
-          description="Pilih satu file PDF untuk diupload. Klik atau seret file ke sini."
+          description="Pilih file PDF untuk diupload. Klik atau Tarik file ke sini."
           accept="application/pdf"
           onFilesSelected={handleSinglePdf}
           onUpload={handleSingleUpload}
@@ -116,7 +116,7 @@ export function Upload() {
         {/* Upload Folder */}
         <UploadCard
           title="Upload Folder PDF"
-          description="Pilih folder yang berisi file PDF. Klik atau seret folder ke sini."
+          description="Pilih folder yang berisi file PDF. Klik atau tarik beberapa file ke sini."
           accept="application/pdf"
           webkitdirectory={true}
           multiple={true}
